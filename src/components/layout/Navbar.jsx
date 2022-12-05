@@ -10,7 +10,7 @@ export default function Navbar() {
   return (
     <nav className={styles.navbar}>
       <Container>
-        <Link className={styles.item} to="/">
+        <Link className={styles.item} to="/Projeto_HC">
           <img src={logo} alt="Costs" />
         </Link>
         <ul className={styles.list}>
