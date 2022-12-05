@@ -3,14 +3,15 @@ import React, { useState }  from 'react'
 import Input from '../form/Input'
 import SubmitButton from '../form/SubmitButton'
 
-import styles from './ServiceForm.module.sass'
+import styles from '../project/ProjectForm.module.sass'
 
-export default function ServiceForm({ hndleSubmit, btnText, projectData }) {
+export default function ServiceForm({ handleSubmit, btnText, projectData }) {
   const [service, setService] = useState({})
 
     function submit(e) {
         e.preventDefault()
-        projectData.services
+        projectData.services.push(service)
+        handleSubmit(projectData)
     }
 
   function handleChange(e) {
