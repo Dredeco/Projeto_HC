@@ -7,6 +7,7 @@ import ProjectForm from '../project/ProjectForm'
 import Message from '../layout/Message'
 
 import styles from './Project.module.sass'
+import ServiceForm from '../services/ServiceForm'
 
 export default function Project() {
     const { id } = useParams()
@@ -108,7 +109,11 @@ export default function Project() {
                             {!showServiceForm ? 'Adicionar Serviço' : 'Fechar'}
                         </button>
                         <div className={styles.project_info}>
-                            {showServiceForm && <div>formulário de serviço</div>}
+                            {showServiceForm && <ServiceForm 
+                                handleSubmit={createService}
+                                btnText="Adicionar Serviço"
+                                projectData={project}
+                            />}
                         </div>
                     </div>
                     <h2>Serviços</h2>
