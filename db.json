@@ -7,8 +7,15 @@
         "id": "2",
         "name": "Desenvolvimento"
       },
-      "cost": 0,
-      "services": [],
+      "cost": 5400,
+      "services": [
+        {
+          "name": "Site 1",
+          "cost": "5400",
+          "description": "Montagem de site",
+          "id": "33c815ed-6044-4d8d-a6e0-3a0f83ce4275"
+        }
+      ],
       "id": 2
     },
     {
