@@ -1,44 +1,37 @@
 {
   "projects": [
     {
-      "name": "Site 56",
-      "budget": "54000",
+      "name": "Site 1",
+      "budget": "2000",
       "category": {
         "id": "2",
         "name": "Desenvolvimento"
       },
-      "cost": 5400,
-      "services": [
-        {
-          "name": "Site 1",
-          "cost": "5400",
-          "description": "Montagem de site",
-          "id": "33c815ed-6044-4d8d-a6e0-3a0f83ce4275"
-        }
-      ],
-      "id": 2
+      "cost": 0,
+      "services": [],
+      "id": 1
     },
     {
-      "name": "Projeto 4",
-      "budget": "5600",
+      "name": "Site 2",
+      "budget": "4000",
       "category": {
         "id": "4",
         "name": "Planejamento"
       },
       "cost": 0,
       "services": [],
-      "id": 5
+      "id": 2
     },
     {
-      "name": "Curso WebMaster Front-End Completo",
-      "budget": "12334",
+      "name": "Site 3",
+      "budget": "3000",
       "category": {
         "id": "3",
         "name": "Design"
       },
       "cost": 0,
       "services": [],
-      "id": 6
+      "id": 3
     }
   ],
   "categories": [

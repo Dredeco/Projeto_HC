@@ -39,6 +39,8 @@ export default function Projects() {
   }, [])
 
   function removeProject(id) {
+    setProjectMessage('')
+    
     fetch(`http://localhost:5000/projects/${id}`, {
       method: 'DELETE',
       headers: {
@@ -60,7 +62,7 @@ export default function Projects() {
       </div>
       {message && <Message msg={message} type="success" />}
       {projectMessage && <Message msg={projectMessage} type="success" />}
-      <Container customClass="Start">
+      <Container customClass="start">
         {projects.length > 0 &&
           projects.map((project) => <ProjectCard 
           id={project.id}
