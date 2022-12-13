@@ -8,6 +8,18 @@ export default function NewProject() {
 
   const history = useNavigate()
 
+  function writeUserData(project) {
+
+    project.cost = 0
+    project.services= []
+
+    set(ref(db, 'projects/' + userId), {
+      username: name,
+      email: email,
+      profile_picture : imageUrl
+    });
+  }
+
   function createPost(project) {
     // initialize cost and services
     project.cost = 0

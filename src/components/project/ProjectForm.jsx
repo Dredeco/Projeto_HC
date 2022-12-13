@@ -1,46 +1,60 @@
 import { useEffect, useState } from 'react'
+import {collection, addDoc, Timestamp, getDocs} from 'firebase/firestore'
+import {db} from './../../firebase'
+
 import Input from '../form/Input'
 import Select from '../form/Select'
 import SubmitButton from '../form/SubmitButton'
 
 import styles from './ProjectForm.module.sass'
 
+
 export default function ProjectForm({ handleSubmit, btnText, projectData }) {
 
+  const [project, setProject] = useState([])
   const [categories, setCategories] = useState([])
-  const [project, setProject] = useState(projectData || {})
+  const [name, setName] = useState('')
+  const [budget, setBudget] = useState('')
+
+  const categoriesCollectionRef = collection(db, 'categories');
+  const projectsCollectionRef = collection(db, 'projects');
 
   useEffect(() => {
-    fetch("http://localhost:5000/categories", {
-      method: "GET",
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-      .then((resp) => resp.json())
-      .then((data) => {
-        setCategories(data)
-      })
-      .catch((err) => console.log(err))
-  }, [])
+    const getCategories = async () => {
+      const data = await getDocs(categoriesCollectionRef);
+      setCategories(data.docs.map((doc) => 
+      ({...doc.data(),
+        id: doc.id
+      })))
+    }
+    const getProjects = async () => {
+      const data = await getDocs(projectsCollectionRef);
+      setProject(data.docs.map((doc) =>
+      ({ ...doc.data(),
+        id: doc.id
+      })))
+    }
+    getCategories();
+    getProjects();
+  }, []);
 
-    const submit = (e) => {
+  function handleCategory(e) {
+    setProject ({
+      ...project,
+      category: {
+        id: e.target.value,
+        name: e.target.options[e.target.selectedIndex].text,
+      }
+    })
+  }
+
+  function handleChange(e) {
+    setProject ({ ...project, [e.target.name]: e.target.value })
+  }
+    
+  const submit = async (e) => {
       e.preventDefault()
       handleSubmit(project)
-    }
-
-    function handleCategory(e) {
-      setProject ({ 
-        ...project, 
-        category: {
-          id: e.target.value,
-          name: e.target.options[e.target.selectedIndex].text,
-        },
-      })
-    }
-
-    function handleChange(e) {
-      setProject ({ ...project, [e.target.name]: e.target.value })
     }
 
   return (
@@ -51,9 +65,9 @@ export default function ProjectForm({ handleSubmit, btnText, projectData }) {
                 name="name"
                 placeholder="Insira o nome do projeto"
                 handleOnChange={handleChange}
-                value={project.name ? project.name : ''}
-                
+                value={project.name ? project.name : ''}     
             />
+
         <Input
                 type="number"
                 text="Orçamento do projeto"
@@ -61,8 +75,8 @@ export default function ProjectForm({ handleSubmit, btnText, projectData }) {
                 placeholder="Insira o orçamento do projeto"
                 handleOnChange={handleChange}
                 value={project.budget ? project.budget : ''}
-                
             />
+
         <Select 
           name="category_id" 
           text="Selecione a categoria"

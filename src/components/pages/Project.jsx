@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { json, useParams } from 'react-router-dom'
 import { parse, v4 as uuidv4 } from 'uuid'
+import {collection, getDocs, query} from 'firebase/firestore'
+import {db} from './../../firebase'
 
 import Container from '../layout/Container'
 import Loading from '../layout/Loading'
@@ -12,7 +14,9 @@ import styles from './Project.module.sass'
 import ServiceForm from '../services/ServiceForm'
 
 export default function Project() {
+
     const { id } = useParams()
+    const projectsCollectionRef = query(collection(db, 'projects'));
 
     const [project, setProject] = useState([])
     const [services, setServices] = useState([])
@@ -23,19 +27,17 @@ export default function Project() {
  
     useEffect(() => {
         setTimeout(() => {
-            fetch(`http://localhost:5000/projects/${id}`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type' : 'application/json',
-                },
-            })
-            .then((resp) => resp.json())
-            .then((data) => {
-                setProject(data)
-                setServices(data.services)
-            })
-            .catch((err) => console.log)
-        }, 300);
+            const getProject = async () => {
+              const data = await getDocs(projectsCollectionRef);
+              setProject(data.docs.map((doc) =>
+              ({ ...doc.data(),
+                id: doc.id,
+                name: doc.name
+              })))
+            }
+            getProject();
+            console.log(project.name)
+          }, 1000);
     }, [id])
 
     function editPost(project) {

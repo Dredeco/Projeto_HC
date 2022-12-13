@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
+import {collection, getDocs} from 'firebase/firestore'
+import {db} from './../../firebase'
 
 import Message from '../layout/Message'
 import Container from '../layout/Container'
@@ -14,6 +16,8 @@ export default function Projects() {
   const [removeLoading, setRemoveLoading] = useState(false)
   const [projectMessage, setProjectMessage] = useState('')
 
+  const projectsCollectionRef = collection(db, 'projects');
+
   const location = useLocation()
   let message = ''
   if (location.state) {
@@ -22,19 +26,15 @@ export default function Projects() {
 
   useEffect(() => {
     setTimeout(() => {
-      fetch('http://localhost:5000/projects', {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      })
-      .then((resp) => resp.json())
-      .then((data) => {
-        console.log(data)
-        setProjects(data)
-        setRemoveLoading(true)
-      })
-      .catch((err) => console.log(err))
+      const getProjects = async () => {
+        const data = await getDocs(projectsCollectionRef);
+        setProjects(data.docs.map((doc) =>
+        ({ ...doc.data(),
+          id: doc.id
+        })))
+      }
+      getProjects();
+      setRemoveLoading(true)
     }, 2000);
   }, [])
 
