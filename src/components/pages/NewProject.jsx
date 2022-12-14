@@ -1,4 +1,7 @@
 import { useNavigate } from 'react-router-dom'
+import {collection, addDoc, Timestamp} from 'firebase/firestore'
+import {db} from './../../firebase'
+
 import React from 'react'
 import ProjectForm from '../project/ProjectForm'
 
@@ -8,37 +11,24 @@ export default function NewProject() {
 
   const history = useNavigate()
 
-  function writeUserData(project) {
-
-    project.cost = 0
-    project.services= []
-
-    set(ref(db, 'projects/' + userId), {
-      username: name,
-      email: email,
-      profile_picture : imageUrl
-    });
-  }
-
   function createPost(project) {
     // initialize cost and services
     project.cost = 0
     project.services= []
 
-    fetch("http://localhost:5000/projects", {
-      method: "POST",
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(project),
-    })
-      .then((resp) => resp.json())
-      .then((data) => {
-        console.log(data)
-        //redirect
-        history('/Projeto_HC/projects',{state: { message: 'Projeto criado com sucesso!'}})
+    try {
+     addDoc(collection(db, 'projects'), {
+        name: project.name,
+        budget: project.budget,
+        category: project.category,
+        cost: 0,
+        services: [],
+        created: Timestamp.now()
       })
-      .catch((err) => console.log(err))
+      history('/Projeto_HC/projects',{state: { message: 'Projeto criado com sucesso!'}})
+    } catch (err) {
+      alert(err)
+    }
   }
 
   return (

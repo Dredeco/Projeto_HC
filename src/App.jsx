@@ -9,9 +9,18 @@ import Container from "./components/layout/Container"
 import Navbar from "./components/layout/Navbar"
 import Footer from "./components/layout/Footer"
 import Project from "./components/pages/Project"
+import { useEffect } from "react"
+import { addProjectAcess } from "./services/dataAcess/projectsAcess"
+import { getProjectsAction, setProjectAction, updateProjectAction } from "./services/actions/projectsAction"
 
 
 function App() {
+
+  useEffect(() =>{
+    getProjectsAction().then((res) =>{
+      console.log(res)
+    });
+  }, [])
 
   return (
     <Router>
@@ -19,7 +28,6 @@ function App() {
 
       <Container customClass='min-height'>
         <Routes>
-            <Route path="/" element={<Home />} />
             <Route path="/Projeto_HC/" element={<Home />} />
             <Route path="/Projeto_HC/company" element={<Company />} />
             <Route path="/Projeto_HC/projects" element={<Projects />} />
