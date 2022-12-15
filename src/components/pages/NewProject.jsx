@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 import {collection, addDoc, Timestamp} from 'firebase/firestore'
-import {db} from './../../firebase'
+import {db} from '../../firebase'
 
 import React from 'react'
 import ProjectForm from '../project/ProjectForm'

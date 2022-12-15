@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { json, useParams } from 'react-router-dom'
 import { parse, v4 as uuidv4 } from 'uuid'
-import {collection, getDocs, query} from 'firebase/firestore'
-import {db} from './../../firebase'
+import {collection, getDocs, getDoc, doc, query, where, documentId} from 'firebase/firestore'
+import {db} from '../../firebase'
 
 import Container from '../layout/Container'
 import Loading from '../layout/Loading'
@@ -14,11 +14,11 @@ import styles from './Project.module.sass'
 import ServiceForm from '../services/ServiceForm'
 
 export default function Project() {
-
     const { id } = useParams()
-    const projectsCollectionRef = query(collection(db, 'projects'));
+    const projectDocRef = query(collection(db, 'projects'), where(documentId(), '==', id));
 
     const [project, setProject] = useState([])
+    var [currentProject, setCurrentProject] = useState([])
     const [services, setServices] = useState([])
     const [showProjectForm, setShowProjectForm] = useState(false)
     const [showServiceForm, setShowServiceForm] = useState(false)
@@ -27,18 +27,18 @@ export default function Project() {
  
     useEffect(() => {
         setTimeout(() => {
-            const getProject = async () => {
-              const data = await getDocs(projectsCollectionRef);
-              setProject(data.docs.map((doc) =>
-              ({ ...doc.data(),
-                id: doc.id,
-                name: doc.name
-              })))
-            }
-            getProject();
-            console.log(project.name)
-          }, 1000);
+            const getProjects = async () => {
+            const data = await getDocs(projectDocRef);
+                setProject(data.docs.map((doc) =>
+                ({ ...doc.data(),
+                    id: doc.id,
+                })))
+              }
+              getProjects();
+        }, 0);
     }, [id])
+    currentProject = project[0];
+    console.log(project[0], currentProject)
 
     function editPost(project) {
         setMessage('')
@@ -147,25 +147,25 @@ export default function Project() {
 
   return (
     <>
-        {project.name ? (
+        {currentProject ? (
             <div className={styles.project_details}>
                 <Container customClass="column">
                     {message && <Message type={type} msg={message} />}
                     <div className={styles.details_container}>
-                        <h1>Projeto: {project.name}</h1>
+                        <h1>Projeto: {currentProject.name}</h1>
                         <button className={styles.btn} onClick={toggleProjectForm}>
                             {!showProjectForm ? 'Editar Projeto' : 'Fechar'}
                         </button>
                         {!showProjectForm ? (
                             <div className={styles.project_info}>
                                 <p>
-                                    <span>Categoria:</span> {project.category.name}
+                                    <span>Categoria:</span> {currentProject.category.name}
                                 </p>
                                 <p>
-                                    <span>Total de Orçamento:</span> {project.budget}
+                                    <span>Total de Orçamento:</span> {currentProject.budget}
                                 </p>
                                 <p>
-                                    <span>Total Utilizado:</span> {project.cost}
+                                    <span>Total Utilizado:</span> {currentProject.cost}
                                 </p>
                             </div>
                         ): (

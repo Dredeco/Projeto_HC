@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
-import {collection, getDocs} from 'firebase/firestore'
-import {db} from './../../firebase'
 
 import Message from '../layout/Message'
 import Container from '../layout/Container'
@@ -10,13 +8,12 @@ import LinkButton from '../layout/LinkButton'
 import ProjectCard from '../project/ProjectCard'
 
 import styles from './Projects.module.sass'
+import { getProjectsAction } from '../../services/actions/projectsAction'
 
 export default function Projects() {
   const [projects, setProjects] = useState([])
   const [removeLoading, setRemoveLoading] = useState(false)
   const [projectMessage, setProjectMessage] = useState('')
-
-  const projectsCollectionRef = collection(db, 'projects');
 
   const location = useLocation()
   let message = ''
@@ -27,11 +24,8 @@ export default function Projects() {
   useEffect(() => {
     setTimeout(() => {
       const getProjects = async () => {
-        const data = await getDocs(projectsCollectionRef);
-        setProjects(data.docs.map((doc) =>
-        ({ ...doc.data(),
-          id: doc.id
-        })))
+        const data = await getProjectsAction();
+        setProjects(data)
       }
       getProjects();
       setRemoveLoading(true)

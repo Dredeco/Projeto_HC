@@ -20,6 +20,6 @@ export async function updateProjectAction(name, id){
 export async function getProjectsAction(name, id){
     const response = await getProjectsAcess(name, id);
     const projects = (response.docs.map((doc) =>
-    ({ ...doc.data() })))
+    ({ ...doc.data(), id: doc.id })))
     return projects;
 }

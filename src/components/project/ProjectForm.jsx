@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import {collection, addDoc, Timestamp, getDocs} from 'firebase/firestore'
-import {db} from './../../firebase'
+import {db} from '../../firebase'
 
 import Input from '../form/Input'
 import Select from '../form/Select'
