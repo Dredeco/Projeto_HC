@@ -7,6 +7,8 @@ import Select from '../form/Select'
 import SubmitButton from '../form/SubmitButton'
 
 import styles from './ProjectForm.module.sass'
+import { getProjectAction, getProjectsAction } from '../../services/actions/projectsAction'
+import { useParams } from 'react-router-dom'
 
 
 export default function ProjectForm({ handleSubmit, btnText, projectData }) {
@@ -15,8 +17,10 @@ export default function ProjectForm({ handleSubmit, btnText, projectData }) {
   const [categories, setCategories] = useState([])
   const [name, setName] = useState('')
   const [budget, setBudget] = useState('')
+  const {id} = useParams()
 
   const categoriesCollectionRef = collection(db, 'categories');
+  const projectsCollectionRef = collection(db, 'projects');
 
   useEffect(() => {
     const getCategories = async () => {
@@ -27,10 +31,12 @@ export default function ProjectForm({ handleSubmit, btnText, projectData }) {
       })))
     }
     const getProjects = async () => {
-      setProject(projectData)
+      const data = await getProjectAction({id: id || ''});
+      setProject(data[0])
     }
-    getCategories();
     getProjects();
+    getCategories();
+    console.log(project)
   }, []);
 
   function handleCategory(e) {
@@ -60,7 +66,7 @@ export default function ProjectForm({ handleSubmit, btnText, projectData }) {
                 name="name"
                 placeholder="Insira o nome do projeto"
                 handleOnChange={handleChange}
-                value={project.name ? project.name : ''}     
+                value={project ? project.name : ''}     
             />
 
         <Input
@@ -69,7 +75,7 @@ export default function ProjectForm({ handleSubmit, btnText, projectData }) {
                 name="budget"
                 placeholder="Insira o orçamento do projeto"
                 handleOnChange={handleChange}
-                value={project.budget ? project.budget : ''}
+                value={project ? project.budget : ''}
             />
 
         <Select 
