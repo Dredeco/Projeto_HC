@@ -27,7 +27,7 @@ export default function NewProject() {
       })
       history('/Projeto_HC/projects',{state: { message: 'Projeto criado com sucesso!'}})
     } catch (err) {
-      alert(err)
+      alert("Selecione a categoria do projeto!")
     }
   }
 
