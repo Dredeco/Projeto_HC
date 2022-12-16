@@ -12,13 +12,13 @@ import ServiceCard from '../services/ServiceCard'
 
 import styles from './Project.module.sass'
 import ServiceForm from '../services/ServiceForm'
+import { getProjectAction } from '../../services/actions/projectsAction'
 
 export default function Project() {
     const { id } = useParams()
-    const projectDocRef = query(collection(db, 'projects'), where(documentId(), '==', id));
 
     const [project, setProject] = useState([])
-    var [currentProject, setCurrentProject] = useState([])
+    const [currentProject, setCurrentProject] = useState([])
     const [services, setServices] = useState([])
     const [showProjectForm, setShowProjectForm] = useState(false)
     const [showServiceForm, setShowServiceForm] = useState(false)
@@ -27,18 +27,19 @@ export default function Project() {
  
     useEffect(() => {
         setTimeout(() => {
+            setCurrentProject('')
+            setProject('')
+
             const getProjects = async () => {
-            const data = await getDocs(projectDocRef);
-                setProject(data.docs.map((doc) =>
-                ({ ...doc.data(),
-                    id: doc.id,
-                })))
+            const data = await getProjectAction({id: id});
+                setProject(data)
+                setCurrentProject(data[0])
               }
               getProjects();
-        }, 0);
+              console.log(project)
+              console.log(currentProject)
+        }, 2000);
     }, [id])
-    currentProject = project[0];
-    console.log(project[0], currentProject)
 
     function editPost(project) {
         setMessage('')
@@ -147,7 +148,7 @@ export default function Project() {
 
   return (
     <>
-        {currentProject ? (
+        {currentProject.name ? (
             <div className={styles.project_details}>
                 <Container customClass="column">
                     {message && <Message type={type} msg={message} />}

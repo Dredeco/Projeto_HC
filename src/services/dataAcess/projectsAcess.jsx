@@ -1,9 +1,10 @@
 import { db } from "../../firebase";
-import {collection, addDoc, Timestamp, query, setDoc, doc, where, documentId, updateDoc, getDocs} from "firebase/firestore";
+import {collection, addDoc, Timestamp, query, getDoc, setDoc, doc, where, documentId, updateDoc, getDocs} from "firebase/firestore";
 import { async } from "@firebase/util";
 
 const projectsCollectionRef = collection(db, 'projects')
 const projectsDocumentRef = doc(db, 'projects', 'LET')
+
 
 export async function addProjectAcess(name, budget, category){
     const response = await addDoc(projectsCollectionRef, {
@@ -39,5 +40,10 @@ export async function updateProjectAcess(name){
 
 export async function getProjectsAcess(){
     const response = await getDocs(projectsCollectionRef)
+    return response;
+}
+
+export async function getProjectAcess(id){
+    const response = await getDocs(query(collection(db, 'projects'), where(documentId(), '==', `${id.id}`)))
     return response;
 }

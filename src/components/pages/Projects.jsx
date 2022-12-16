@@ -23,6 +23,8 @@ export default function Projects() {
 
   useEffect(() => {
     setTimeout(() => {
+      setProjectMessage('')
+      
       const getProjects = async () => {
         const data = await getProjectsAction();
         setProjects(data)
