@@ -17,7 +17,6 @@ export default function ProjectForm({ handleSubmit, btnText, projectData }) {
   const [budget, setBudget] = useState('')
 
   const categoriesCollectionRef = collection(db, 'categories');
-  const projectsCollectionRef = collection(db, 'projects');
 
   useEffect(() => {
     const getCategories = async () => {
@@ -28,11 +27,7 @@ export default function ProjectForm({ handleSubmit, btnText, projectData }) {
       })))
     }
     const getProjects = async () => {
-      const data = await getDocs(projectsCollectionRef);
-      setProject(data.docs.map((doc) =>
-      ({ ...doc.data(),
-        id: doc.id
-      })))
+      setProject(projectData)
     }
     getCategories();
     getProjects();

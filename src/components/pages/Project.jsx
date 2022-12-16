@@ -36,8 +36,6 @@ export default function Project() {
                 setCurrentProject(data[0])
               }
               getProjects();
-              console.log(project)
-              console.log(currentProject)
         }, 2000);
     }, [id])
 
@@ -174,7 +172,7 @@ export default function Project() {
                                 <ProjectForm 
                                     handleSubmit={editPost} 
                                     btnText="Concluir edição" 
-                                    projectData={project} 
+                                    projectData={currentProject} 
                                 />
                             </div>
                         )}

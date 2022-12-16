@@ -27,6 +27,5 @@ export async function getProjectAction(id){
     const response = await getProjectAcess(id);
     const projects = (response.docs.map((doc) =>
     ({ ...doc.data(), id: doc.id })))
-    console.log(projects)
     return projects;
 }
