@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
+import { deleteProjectAction, getProjectsAction } from '../../services/actions/projectsAction'
 
 import Message from '../layout/Message'
 import Container from '../layout/Container'
@@ -8,7 +9,6 @@ import LinkButton from '../layout/LinkButton'
 import ProjectCard from '../project/ProjectCard'
 
 import styles from './Projects.module.sass'
-import { getProjectsAction } from '../../services/actions/projectsAction'
 
 export default function Projects() {
   const [projects, setProjects] = useState([])
@@ -31,23 +31,13 @@ export default function Projects() {
       }
       getProjects();
       setRemoveLoading(true)
-    }, 2000);
+    }, 1000);
   }, [])
 
   function removeProject(id) {
     setProjectMessage('')
-    
-    fetch(`http://localhost:5000/projects/${id}`, {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-    }).then(resp => resp.json())
-    .then((data) => {
-      setProjects(projects.filter((project) => project.id !== id))
-      setProjectMessage('Projeto removido com sucesso!')
-    })
-    .catch(err => console.log(err))
+    deleteProjectAction({id: id}).then(setProjects(projects.filter((project) => project.id !== id),
+    setProjectMessage('Projeto deletado com sucesso!')))
   }
 
   return (

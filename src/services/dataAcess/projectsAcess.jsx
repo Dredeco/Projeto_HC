@@ -1,5 +1,5 @@
 import { db } from "../../firebase";
-import {collection, addDoc, Timestamp, query, getDoc, setDoc, doc, where, documentId, updateDoc, getDocs} from "firebase/firestore";
+import {collection, addDoc, Timestamp, query, getDoc, setDoc, doc, where, documentId, updateDoc, getDocs, deleteDoc} from "firebase/firestore";
 import { async } from "@firebase/util";
 
 const projectsCollectionRef = collection(db, 'projects')
@@ -27,14 +27,12 @@ export async function setProjectAcess(name, budget, category, cost, services){
     return response;
 }
 
-export async function updateProjectAcess(name){
-    const response = await updateDoc(projectsDocumentRef, {
-        name: name,
-        budget: "",
-        category: [],
-        cost: 0,
-        services: [],
-    })
+export async function updateProjectAcess(project){
+    const response = await updateDoc(doc(db, 'projects', `${project.id}`), {
+        name: project.name,
+        budget: project.budget,
+        category: project.category,
+    });
     return response;
 }
 
@@ -45,5 +43,10 @@ export async function getProjectsAcess(){
 
 export async function getProjectAcess(id){
     const response = await getDocs(query(collection(db, 'projects'), where(documentId(), '==', `${id.id}`)))
+    return response;
+}
+
+export async function deleteProjectAccess(id){
+    const response = (doc(db, 'projects', `${id}`));
     return response;
 }

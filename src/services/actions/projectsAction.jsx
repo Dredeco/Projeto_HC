@@ -1,4 +1,10 @@
-import { addProjectAcess, setProjectAcess, updateProjectAcess, getProjectsAcess, getProjectAcess } from "../dataAcess/projectsAcess";
+import { deleteDoc, updateDoc } from "firebase/firestore";
+import { addProjectAcess, 
+    setProjectAcess, 
+    updateProjectAcess, 
+    getProjectsAcess, 
+    getProjectAcess,
+    deleteProjectAccess } from "../dataAcess/projectsAcess";
 
 export async function addProjectAction(name){
     const response = await addProjectAcess(name);
@@ -10,9 +16,8 @@ export async function setProjectAction(name, id){
     return response;
 }
 
-export async function updateProjectAction(name, id){
-    const response = await updateProjectAcess(name, id);
-    console.log(response)
+export async function updateProjectAction(project){
+    const response = await updateProjectAcess(project)
     return response;
 }
 
@@ -27,5 +32,12 @@ export async function getProjectAction(id){
     const response = await getProjectAcess(id);
     const projects = (response.docs.map((doc) =>
     ({ ...doc.data(), id: doc.id })))
+    return projects;
+}
+
+export async function deleteProjectAction(id){
+    const response = await deleteProjectAccess(id.id);
+    console.log(response)
+    const projects = deleteDoc(response)
     return projects;
 }

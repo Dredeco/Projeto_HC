@@ -12,7 +12,7 @@ import ServiceCard from '../services/ServiceCard'
 
 import styles from './Project.module.sass'
 import ServiceForm from '../services/ServiceForm'
-import { getProjectAction } from '../../services/actions/projectsAction'
+import { getProjectAction, updateProjectAction } from '../../services/actions/projectsAction'
 
 export default function Project() {
     const { id } = useParams()
@@ -48,23 +48,12 @@ export default function Project() {
             setType('error')
             return false
         }
-
-        fetch(`http://localhost:5000/projects/${project.id}`, {
-            method: 'PATCH',
-            headers: {
-                'Content-Type' : 'application/json',
-            },
-            body: JSON.stringify(project),
-        })
-        .then((resp) => resp.json())
-        .then((data) => {
-            setProject(data)
-            setShowProjectForm(false)
+        setProject(updateProjectAction(project))
+        setShowProjectForm(false)
+        setCurrentProject(project)
             // mensagem
             setMessage('Projeto atualizado!')
             setType('success')
-        })
-        .catch((err) => console.log)
     }
 
     function createService(project) {
